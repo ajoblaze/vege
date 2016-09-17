@@ -9,16 +9,50 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.test.tut.MainActivity">
 
+    <ImageView
+        android:id="@+id/img_profile_pic"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="G+ Profile Pic"/>
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:text="Hello World!"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/img_profile_pic"/>
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
         android:layout_below="@id/text" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/login_button" />
+
+    <Button
+        android:id="@+id/sign_out_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/login_button"
+        android:visibility="gone"
+        android:text="Logout"/>
+
+    <Button
+        android:id="@+id/revoke_access_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/sign_out_button"
+        android:visibility="gone"
+        android:text="Revoke Access"/>
 </RelativeLayout>

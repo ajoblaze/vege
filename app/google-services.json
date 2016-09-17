@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "971671251175",
+    "project_id": "firebase-testtut"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971671251175:android:0822e5e4a4d21ba8",
+        "android_client_info": {
+          "package_name": "com.test.tut"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971671251175-r0g5l3qq54e46r2ku0d3v4ev5uos5aj0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.test.tut",
+            "certificate_hash": "E039D25CA450699BAF2D0C6BFE474B75DE1DCBDE"
+          }
+        },
+        {
+          "client_id": "971671251175-hi5kmn87ntb15nb2vphqtq9a0ch0g9d4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWwiu2LiJMxxUTN3FZd9zxDJv8B7PKgko"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
