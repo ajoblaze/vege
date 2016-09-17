@@ -1,4 +1,4 @@
-package com.imajiku.vegefinder;
+package com.test.tut;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

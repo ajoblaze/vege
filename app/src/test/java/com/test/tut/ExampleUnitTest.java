@@ -1,4 +1,4 @@
-package com.imajiku.vegefinder;
+package com.test.tut;
 
 import org.junit.Test;
 
