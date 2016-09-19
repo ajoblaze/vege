@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/VegeFinder.iml" filepath="$PROJECT_DIR$/VegeFinder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Testtut.iml" filepath="$PROJECT_DIR$/Testtut.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

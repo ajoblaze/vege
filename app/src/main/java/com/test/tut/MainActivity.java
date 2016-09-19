@@ -1,6 +1,7 @@
 package com.test.tut;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,8 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -30,6 +30,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     private CallbackManager callbackManager;
@@ -38,10 +40,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private AccessTokenTracker accessTokenTracker;
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 007;
+    private static final int REQUEST_VERIFY = 98;
+    private static final int RESULT_VERIFY = 99;
     private SignInButton signInButton;
     private Button signOutButton;
     private Button revokeAccessButton;
+    private Button sendEmailButton;
     private ImageView imgProfilePic;
+    private String code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,23 +133,28 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         revokeAccessButton = (Button) findViewById(R.id.revoke_access_button);
         imgProfilePic = (ImageView) findViewById(R.id.img_profile_pic);
+        sendEmailButton = (Button) findViewById(R.id.send_email_button);
 
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setScopes(gso.getScopeArray());
         signInButton.setOnClickListener(this);
         signOutButton.setOnClickListener(this);
         revokeAccessButton.setOnClickListener(this);
+        sendEmailButton.setOnClickListener(this);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e(TAG, "req: "+requestCode+", res:"+resultCode);
         callbackManager.onActivityResult(requestCode, resultCode, data); // FB
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
+        }else if(requestCode==REQUEST_VERIFY && resultCode==RESULT_VERIFY){
+            tv.setText("Email has been verified.");
         }
     }
 
@@ -169,6 +180,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
             case R.id.revoke_access_button:
                 revokeAccess();
+                break;
+
+            case R.id.send_email_button:
+                new SendEmailTask().execute();
                 break;
         }
     }
@@ -197,6 +212,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         updateUI(false);
                     }
                 });
+    }
+
+    private void sendEmail() {
+        Log.e(TAG, "btn presed2");
+        BackgroundMail.newBuilder(this)
+                .withUsername("from@xxx.com")
+                .withPassword("*******************")
+                .withMailto("to@xxx.com")
+                .withSubject("this is the subject3")
+                .withBody("this is the code: "+code)
+                .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e(TAG, "email success");
+                    }
+                })
+                .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+                    @Override
+                    public void onFail() {
+                        Log.e(TAG, "email failed");
+                    }
+                })
+                .send();
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -238,6 +276,39 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             signOutButton.setVisibility(View.GONE);
             revokeAccessButton.setVisibility(View.GONE);
 //            llProfileLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private String generateCode(){
+        String alnum = "1234567890QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+        StringBuilder builder = new StringBuilder();
+        Random random = new Random();
+        for(int i=0;i<4;i++){
+            builder.append(alnum.charAt(random.nextInt(alnum.length())));
+        }
+        return builder.toString();
+    }
+
+    class SendEmailTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            code = generateCode();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            sendEmail();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Intent i = new Intent(MainActivity.this, VerifyActivity.class);
+            i.putExtra("code", code);
+            startActivityForResult(i, REQUEST_VERIFY);
         }
     }
 }
